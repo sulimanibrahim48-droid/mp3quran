@@ -1,0 +1,38 @@
+import { BookOpen } from "lucide-react";
+
+const HeroBanner = () => {
+  return (
+    <header className="relative overflow-hidden">
+      {/* Background with gradient + pattern */}
+      <div className="absolute inset-0 bg-gradient-to-bl from-primary via-primary to-[hsl(153,40%,12%)]" />
+      <div className="absolute inset-0 islamic-pattern opacity-60" />
+      
+      {/* Decorative circles */}
+      <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-[hsl(var(--gold)/0.08)] blur-3xl" />
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-[hsl(var(--gold)/0.06)] blur-3xl" />
+
+      <div className="relative z-10 container mx-auto px-4 py-16 md:py-24 text-center">
+        {/* Logo */}
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[hsl(var(--gold)/0.15)] backdrop-blur-sm border border-[hsl(var(--gold)/0.2)] mb-6">
+          <BookOpen className="w-10 h-10 text-[hsl(var(--gold))]" />
+        </div>
+
+        <h1 className="text-3xl md:text-5xl font-extrabold text-primary-foreground mb-4 leading-tight">
+          القرآن الكريم
+        </h1>
+        <p className="text-lg md:text-xl text-[hsl(var(--gold-light))] max-w-xl mx-auto font-light">
+          رحلة طيبة في رحاب القرآن الكريم
+        </p>
+
+        {/* Decorative line */}
+        <div className="mt-8 flex items-center justify-center gap-3">
+          <span className="block w-12 h-px bg-[hsl(var(--gold)/0.4)]" />
+          <span className="block w-2 h-2 rounded-full bg-[hsl(var(--gold)/0.6)]" />
+          <span className="block w-12 h-px bg-[hsl(var(--gold)/0.4)]" />
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default HeroBanner;
