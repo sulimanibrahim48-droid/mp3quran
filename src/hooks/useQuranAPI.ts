@@ -15,16 +15,12 @@ interface Reciter {
   id: number;
   name: string;
   letter: string;
-  mpieces: Moshaf[];
+  moshaf: Moshaf[];
 }
 
 interface Surah {
   id: number;
   name: string;
-  start_page: number;
-  end_page: number;
-  makkia: number;
-  type: number;
 }
 
 export interface AvailableSurah {
@@ -37,15 +33,15 @@ export function useQuranAPI() {
   const [reciters, setReciters] = useState<Reciter[]>([]);
   const [surahNames, setSurahNames] = useState<Surah[]>([]);
   const [selectedReciter, setSelectedReciter] = useState<number | null>(null);
-  const [mpieces, setMpieces] = useState<Moshaf[]>([]);
+  const [moshafList, setMoshafList] = useState<Moshaf[]>([]);
   const [selectedMoshaf, setSelectedMoshaf] = useState<number | null>(null);
   const [availableSurahs, setAvailableSurahs] = useState<AvailableSurah[]>([]);
   const [selectedSurah, setSelectedSurah] = useState<AvailableSurah | null>(null);
   const [loading, setLoading] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Fetch reciters and surah names on mount
   useEffect(() => {
+    let cancelled = false;
     async function fetchInitialData() {
       try {
         const [recitersRes, surahRes] = await Promise.all([
@@ -54,18 +50,20 @@ export function useQuranAPI() {
         ]);
         const recitersData = await recitersRes.json();
         const surahData = await surahRes.json();
-        setReciters(recitersData.reciters || []);
-        setSurahNames(surahData.suwar || []);
+        if (!cancelled) {
+          setReciters(recitersData.reciters || []);
+          setSurahNames(surahData.suwar || []);
+        }
       } catch (e) {
-        console.error("Error fetching initial data:", e);
+        console.error("Error fetching data:", e);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
     fetchInitialData();
+    return () => { cancelled = true; };
   }, []);
 
-  // When reciter changes, update moshaf list
   const handleReciterChange = useCallback(
     (reciterId: number) => {
       setSelectedReciter(reciterId);
@@ -73,40 +71,32 @@ export function useQuranAPI() {
       setAvailableSurahs([]);
       setSelectedSurah(null);
       const reciter = reciters.find((r) => r.id === reciterId);
-      setMpieces(reciter?.mpieces || []);
+      setMoshafList(reciter?.moshaf || []);
     },
     [reciters]
   );
 
-  // When moshaf changes, build available surahs
   const handleMoshafChange = useCallback(
     (moshafId: number) => {
       setSelectedMoshaf(moshafId);
       setSelectedSurah(null);
-      const moshaf = mpieces.find((m) => m.id === moshafId);
+      const moshaf = moshafList.find((m) => m.id === moshafId);
       if (!moshaf) return;
 
       const surahIds = moshaf.surah_list.split(",").map(Number);
       const surahs: AvailableSurah[] = surahIds
         .map((id) => {
-          const surahInfo = surahNames.find((s) => s.id === id);
-          const paddedId = String(id).padStart(3, "0");
-          return surahInfo
-            ? {
-                id,
-                name: surahInfo.name,
-                url: `${moshaf.server}${paddedId}.mp3`,
-              }
-            : null;
+          const info = surahNames.find((s) => s.id === id);
+          const padded = String(id).padStart(3, "0");
+          return info ? { id, name: info.name, url: `${moshaf.server}${padded}.mp3` } : null;
         })
         .filter(Boolean) as AvailableSurah[];
 
       setAvailableSurahs(surahs);
     },
-    [mpieces, surahNames]
+    [moshafList, surahNames]
   );
 
-  // Play surah
   const handleSurahChange = useCallback((surah: AvailableSurah) => {
     setSelectedSurah(surah);
     if (audioRef.current) {
@@ -117,7 +107,7 @@ export function useQuranAPI() {
 
   return {
     reciters,
-    mpieces,
+    moshafList,
     availableSurahs,
     selectedReciter,
     selectedMoshaf,
