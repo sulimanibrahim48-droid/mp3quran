@@ -1,6 +1,5 @@
 import HeroBanner from "@/components/HeroBanner";
 import QuranPlayer from "@/components/QuranPlayer";
-import QuranBrowser from "@/components/QuranBrowser";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -8,7 +7,6 @@ const Index = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <HeroBanner />
       <QuranPlayer />
-      <QuranBrowser />
       <Footer />
     </div>
   );
