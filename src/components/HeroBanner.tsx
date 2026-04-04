@@ -1,13 +1,20 @@
 import { BookOpen, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import makkahBg from "@/assets/makkah-bg.jpg";
 
 const HeroBanner = () => {
   const { isDark, toggle } = useTheme();
 
   return (
     <header className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-bl from-primary via-primary to-[hsl(153,40%,12%)] dark:to-[hsl(150,20%,4%)]" />
-      <div className="absolute inset-0 islamic-pattern opacity-60" />
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${makkahBg})` }}
+      />
+      {/* Dark overlay to hide any text in image and ensure readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.85)] via-[hsl(var(--primary)/0.7)] to-[hsl(var(--primary)/0.9)]" />
+      <div className="absolute inset-0 islamic-pattern opacity-40" />
       <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-[hsl(var(--gold)/0.08)] blur-3xl" />
       <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-[hsl(var(--gold)/0.06)] blur-3xl" />
 
