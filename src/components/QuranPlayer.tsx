@@ -5,7 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import playerBg from "@/assets/player-bg.png";
 import { Input } from "@/components/ui/input";
 
+import { Input } from "@/components/ui/input";
+
 const QuranPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const {
     reciters,
     moshafList,
