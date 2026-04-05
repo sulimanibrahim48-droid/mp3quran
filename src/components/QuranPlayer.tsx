@@ -1,7 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuranAPI } from "@/hooks/useQuranAPI";
 import { BookOpen, Mic, BookMarked, Music, Search } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import playerBg from "@/assets/player-bg.png";
 import { Input } from "@/components/ui/input";
 
 const QuranPlayer = () => {
