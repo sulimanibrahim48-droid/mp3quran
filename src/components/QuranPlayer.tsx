@@ -1,10 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuranAPI } from "@/hooks/useQuranAPI";
 import { BookOpen, Mic, BookMarked, Music, Search } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import playerBg from "@/assets/player-bg.png";
 import { Input } from "@/components/ui/input";
 
 const QuranPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const {
     reciters,
     moshafList,
@@ -24,6 +26,22 @@ const QuranPlayer = () => {
   const [moshafOpen, setMoshafOpen] = useState(false);
   const [surahOpen, setSurahOpen] = useState(false);
 
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onEnded = () => setIsPlaying(false);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onEnded);
+    return () => {
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [audioRef]);
+
   const filteredReciters = useMemo(() => {
     if (!reciterSearch.trim()) return reciters;
     return reciters.filter((r) =>
@@ -35,8 +53,18 @@ const QuranPlayer = () => {
   const selectedMoshafName = moshafList.find((m) => m.id === selectedMoshaf)?.name || "";
 
   return (
-    <section className="flex-1 py-12 md:py-16">
-      <div className="container mx-auto px-4">
+    <section className="relative flex-1 py-12 md:py-16 overflow-hidden">
+      {/* Background image when playing */}
+      {isPlaying && (
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
+            style={{ backgroundImage: `url(${playerBg})` }}
+          />
+          <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
+        </>
+      )}
+      <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
             مشغّل القرآن الكريم
