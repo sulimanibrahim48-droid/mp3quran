@@ -1,4 +1,4 @@
-import { BookOpen, Moon, Sun } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import makkahBg from "@/assets/makkah-bg.jpg";
 
@@ -18,17 +18,13 @@ const HeroBanner = () => {
       <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-[hsl(var(--gold)/0.08)] blur-3xl" />
       <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-[hsl(var(--gold)/0.06)] blur-3xl" />
 
-      {/* Dark mode toggle */}
+      {/* Dark mode toggle - fixed circular button */}
       <button
         onClick={toggle}
-        className="absolute top-4 left-4 z-20 w-10 h-10 rounded-xl bg-[hsl(var(--gold)/0.15)] backdrop-blur-sm border border-[hsl(var(--gold)/0.2)] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.25)] transition-colors"
+        className="fixed top-5 left-5 z-50 w-12 h-12 rounded-full border-none cursor-pointer text-xl bg-muted hover:bg-muted/80 text-foreground flex items-center justify-center transition-all duration-300 shadow-lg"
         aria-label="تبديل الوضع"
       >
-        {isDark ? (
-          <Sun className="w-5 h-5 text-[hsl(var(--gold))]" />
-        ) : (
-          <Moon className="w-5 h-5 text-[hsl(var(--gold))]" />
-        )}
+        {isDark ? "☀️" : "🌙"}
       </button>
 
       <div className="relative z-10 container mx-auto px-4 py-16 md:py-24 text-center">
