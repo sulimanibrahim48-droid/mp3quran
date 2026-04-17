@@ -1,12 +1,12 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuranAPI } from "@/hooks/useQuranAPI";
-import { BookOpen, Mic, BookMarked, Music, Search } from "lucide-react";
+import { BookOpen, Mic, BookMarked, Search } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import playerBg from "@/assets/player-bg.png";
 import { Input } from "@/components/ui/input";
 
 const QuranPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const navigate = useNavigate();
   const {
     reciters,
     moshafList,
@@ -15,32 +15,14 @@ const QuranPlayer = () => {
     selectedMoshaf,
     selectedSurah,
     loading,
-    audioRef,
     handleReciterChange,
     handleMoshafChange,
-    handleSurahChange,
   } = useQuranAPI();
 
   const [reciterSearch, setReciterSearch] = useState("");
   const [reciterOpen, setReciterOpen] = useState(false);
   const [moshafOpen, setMoshafOpen] = useState(false);
   const [surahOpen, setSurahOpen] = useState(false);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const onPlay = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
-    const onEnded = () => setIsPlaying(false);
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
-    audio.addEventListener("ended", onEnded);
-    return () => {
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
-      audio.removeEventListener("ended", onEnded);
-    };
-  }, [audioRef]);
 
   const filteredReciters = useMemo(() => {
     if (!reciterSearch.trim()) return reciters;
@@ -52,18 +34,18 @@ const QuranPlayer = () => {
   const selectedReciterName = reciters.find((r) => r.id === selectedReciter)?.name || "";
   const selectedMoshafName = moshafList.find((m) => m.id === selectedMoshaf)?.name || "";
 
+  const goToPlayer = (surahIndex: number) => {
+    navigate("/player", {
+      state: {
+        surahs: availableSurahs,
+        index: surahIndex,
+        reciterName: selectedReciterName,
+      },
+    });
+  };
+
   return (
     <section className="relative flex-1 py-12 md:py-16 overflow-hidden">
-      {/* Background image when playing */}
-      {isPlaying && (
-        <>
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700"
-            style={{ backgroundImage: `url(${playerBg})` }}
-          />
-          <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
-        </>
-      )}
       <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
@@ -208,13 +190,13 @@ const QuranPlayer = () => {
                 {surahOpen && (
                   <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-lg">
                     <div className="max-h-56 overflow-y-auto p-1">
-                      {availableSurahs.map((s) => (
+                      {availableSurahs.map((s, idx) => (
                         <button
                           key={s.id}
                           type="button"
                           onClick={() => {
-                            handleSurahChange(s);
                             setSurahOpen(false);
+                            goToPlayer(idx);
                           }}
                           className={`w-full text-right px-3 py-2 text-sm rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors ${
                             selectedSurah?.id === s.id ? "bg-accent text-accent-foreground font-semibold" : ""
@@ -230,26 +212,6 @@ const QuranPlayer = () => {
             </CardContent>
           </Card>
         </div>
-
-        {/* Audio Player */}
-        <Card className="max-w-4xl mx-auto border-border/60 shadow-lg bg-card">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
-                <Music className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-foreground">
-                  {selectedSurah ? selectedSurah.name : "لم يتم اختيار سورة بعد"}
-                </p>
-                {selectedReciterName && (
-                  <p className="text-xs text-muted-foreground">{selectedReciterName}</p>
-                )}
-              </div>
-            </div>
-            <audio ref={audioRef} controls className="w-full rounded-lg" style={{ direction: "ltr" }} />
-          </CardContent>
-        </Card>
       </div>
     </section>
   );
