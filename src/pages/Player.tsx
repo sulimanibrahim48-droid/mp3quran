@@ -143,7 +143,7 @@ const Player = () => {
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${playerBg})` }}
       />
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-md" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/20 to-background/70" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col min-h-screen p-6 md:p-10">
