@@ -164,9 +164,6 @@ const Player = () => {
 
         {/* Center - Surah & Reciter */}
         <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-          <div className="w-48 h-48 md:w-64 md:h-64 rounded-3xl bg-gradient-to-br from-primary/20 to-accent/20 border border-border/50 shadow-2xl mb-8 flex items-center justify-center backdrop-blur-sm">
-            <div className="text-6xl md:text-7xl">۩</div>
-          </div>
           <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-3">
             {currentSurah.name}
           </h1>
