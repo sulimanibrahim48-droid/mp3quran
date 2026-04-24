@@ -60,12 +60,6 @@ const QuranPlayer = () => {
           {/* Reciter */}
           <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow bg-card">
             <CardContent className="p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Mic className="w-4 h-4 text-primary" />
-                </div>
-                <label className="text-sm font-semibold text-foreground">القارئ</label>
-              </div>
               <div className="relative">
                 <button
                   type="button"
@@ -123,12 +117,6 @@ const QuranPlayer = () => {
           {/* Riwaya */}
           <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow bg-card">
             <CardContent className="p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <BookMarked className="w-4 h-4 text-primary" />
-                </div>
-                <label className="text-sm font-semibold text-foreground">الرواية</label>
-              </div>
               <div className="relative">
                 <button
                   type="button"
@@ -169,12 +157,6 @@ const QuranPlayer = () => {
           {/* Surah */}
           <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow bg-card">
             <CardContent className="p-5">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <BookOpen className="w-4 h-4 text-primary" />
-                </div>
-                <label className="text-sm font-semibold text-foreground">السورة</label>
-              </div>
               <div className="relative">
                 <button
                   type="button"
