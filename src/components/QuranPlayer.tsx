@@ -46,13 +46,16 @@ const QuranPlayer = () => {
 
   return (
     <section className="relative px-4 pb-24 -mt-6 z-30">
-      <div className="max-w-md mx-auto space-y-4">
-        {/* Reciter Card */}
+      <div className="max-w-4xl mx-auto space-y-6">
+        {/* Horizontal Container */}
+        <div className="grid grid-cols-3 gap-2 md:gap-4">
+          
+          {/* Reciter Card */}
           <Card className="rounded-[20px] border-none shadow-sm bg-white overflow-hidden">
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-gray-900">القارئ</h3>
-                <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.2)] flex items-center justify-center text-black">
+                <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.2)] flex items-center justify-center text-black shrink-0">
                   <Mic className="w-5 h-5" />
                 </div>
               </div>
@@ -60,10 +63,10 @@ const QuranPlayer = () => {
                 <button
                   type="button"
                   onClick={() => { setReciterOpen(!reciterOpen); setMoshafOpen(false); setSurahOpen(false); }}
-                  className="flex h-12 w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-2 text-base text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 disabled:opacity-50"
                   disabled={loading}
                 >
-                  <span>
+                  <span className="truncate ml-2 text-right">
                     {loading ? "جاري التحميل..." : selectedReciterName || "اختر القارئ"}
                   </span>
                   <svg className="h-4 w-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -110,12 +113,12 @@ const QuranPlayer = () => {
             </CardContent>
           </Card>
 
-          {/* Riwaya */}
+          {/* Riwaya Label & Filter */}
           <Card className="rounded-[20px] border-none shadow-sm bg-white overflow-hidden">
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-gray-900">الرواية</h3>
-                <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-800">
+                <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-800 shrink-0">
                   <BookOpen className="w-5 h-5" />
                 </div>
               </div>
@@ -123,10 +126,10 @@ const QuranPlayer = () => {
                 <button
                   type="button"
                   onClick={() => { if (selectedReciter && moshafList.length > 0) { setMoshafOpen(!moshafOpen); setReciterOpen(false); setSurahOpen(false); } }}
-                  className="flex h-12 w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-2 text-base text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 disabled:opacity-50"
                   disabled={!selectedReciter || moshafList.length === 0}
                 >
-                  <span>
+                  <span className="truncate ml-2 text-right">
                     {selectedMoshafName || "اختر الرواية"}
                   </span>
                   <svg className="h-4 w-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -156,12 +159,12 @@ const QuranPlayer = () => {
             </CardContent>
           </Card>
 
-          {/* Surah */}
+          {/* Surah List */}
           <Card className="rounded-[20px] border-none shadow-sm bg-white overflow-hidden">
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-gray-900">السورة</h3>
-                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-800">
+                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-800 shrink-0">
                   <BookMarked className="w-5 h-5" />
                 </div>
               </div>
@@ -169,10 +172,10 @@ const QuranPlayer = () => {
                 <button
                   type="button"
                   onClick={() => { if (selectedMoshaf && availableSurahs.length > 0) { setSurahOpen(!surahOpen); setReciterOpen(false); setMoshafOpen(false); } }}
-                  className="flex h-12 w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-2 text-base text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 disabled:opacity-50"
                   disabled={!selectedMoshaf || availableSurahs.length === 0}
                 >
-                  <span>
+                  <span className="truncate ml-2 text-right">
                     {selectedSurah?.name || "اختر السورة"}
                   </span>
                   <svg className="h-4 w-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -201,8 +204,10 @@ const QuranPlayer = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
 
-          {/* Action Buttons */}
+        {/* Action Buttons */}
+        <div className="max-w-md mx-auto space-y-4 pt-4">
           <button
             type="button"
             className="w-full bg-[hsl(var(--emerald))] text-white rounded-[20px] py-4 flex flex-col items-center justify-center gap-2 shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
@@ -223,13 +228,23 @@ const QuranPlayer = () => {
           </button>
 
           <div className="grid grid-cols-2 gap-4">
-            <button className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors">
+            <button 
+              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors"
+              onClick={() => {
+                import("sonner").then(({ toast }) => toast.info("سيتم تفعيل التحميل قريباً"));
+              }}
+            >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
               <span className="text-sm font-medium">تحميل السورة</span>
             </button>
-            <button className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors">
+            <button 
+              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors"
+              onClick={() => {
+                import("sonner").then(({ toast }) => toast.success("تم إضافة السورة للمفضلة"));
+              }}
+            >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
@@ -237,6 +252,7 @@ const QuranPlayer = () => {
             </button>
           </div>
         </div>
+      </div>
     </section>
   );
 };

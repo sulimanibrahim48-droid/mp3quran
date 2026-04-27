@@ -1,12 +1,17 @@
 import { Home, Bookmark, User } from "lucide-react";
+import { toast } from "sonner";
 
 const Footer = () => {
+  const handleFeature = (feature: string) => {
+    toast.info(`الميزة قيد التطوير: ${feature}`);
+  };
+
   return (
     <>
       <footer className="pb-28 pt-8 bg-transparent">
         <div className="flex justify-center items-center gap-6 text-sm text-gray-500 mb-4">
-          <a href="#" className="hover:text-gray-900 transition-colors">عن التطبيق</a>
-          <a href="#" className="hover:text-gray-900 transition-colors">سياسة الخصوصية</a>
+          <button onClick={() => handleFeature("عن التطبيق")} className="hover:text-gray-900 transition-colors">عن التطبيق</button>
+          <button onClick={() => handleFeature("سياسة الخصوصية")} className="hover:text-gray-900 transition-colors">سياسة الخصوصية</button>
         </div>
         <p className="text-xs text-gray-400 text-center">
           &copy; {new Date().getFullYear()} مشغل القرآن الكريم. جميع الحقوق محفوظة
@@ -23,12 +28,12 @@ const Footer = () => {
             <span className="text-[10px] font-bold">الرئيسية</span>
           </button>
           
-          <button className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors mt-2">
+          <button onClick={() => handleFeature("المفضلة")} className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors mt-2">
             <Bookmark className="w-6 h-6" />
             <span className="text-[10px] font-medium">المفضلة</span>
           </button>
 
-          <button className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors mt-2">
+          <button onClick={() => handleFeature("الإعدادات")} className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors mt-2">
             <User className="w-6 h-6" />
             <span className="text-[10px] font-medium">الإعدادات</span>
           </button>
