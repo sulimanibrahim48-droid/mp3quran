@@ -23,6 +23,7 @@ const QuranPlayer = () => {
   const [reciterOpen, setReciterOpen] = useState(false);
   const [moshafOpen, setMoshafOpen] = useState(false);
   const [surahOpen, setSurahOpen] = useState(false);
+  const [surahSearch, setSurahSearch] = useState("");
 
   const filteredReciters = useMemo(() => {
     if (!reciterSearch.trim()) return reciters;
@@ -30,6 +31,13 @@ const QuranPlayer = () => {
       r.name.toLowerCase().includes(reciterSearch.toLowerCase())
     );
   }, [reciters, reciterSearch]);
+
+  const filteredSurahs = useMemo(() => {
+    if (!surahSearch.trim()) return availableSurahs;
+    return availableSurahs.filter((s) =>
+      s.name.includes(surahSearch)
+    );
+  }, [availableSurahs, surahSearch]);
 
   const selectedReciterName = reciters.find((r) => r.id === selectedReciter)?.name || "";
   const selectedMoshafName = moshafList.find((m) => m.id === selectedMoshaf)?.name || "";
@@ -51,7 +59,7 @@ const QuranPlayer = () => {
         <div className="grid grid-cols-3 gap-2 md:gap-4">
           
           {/* Reciter Card */}
-          <Card className="rounded-[20px] border-none shadow-sm bg-white overflow-hidden">
+          <Card className="rounded-[20px] border-none shadow-sm bg-white">
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-gray-900">القارئ</h3>
@@ -114,7 +122,7 @@ const QuranPlayer = () => {
           </Card>
 
           {/* Riwaya Label & Filter */}
-          <Card className="rounded-[20px] border-none shadow-sm bg-white overflow-hidden">
+          <Card className="rounded-[20px] border-none shadow-sm bg-white">
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-gray-900">الرواية</h3>
@@ -160,7 +168,7 @@ const QuranPlayer = () => {
           </Card>
 
           {/* Surah List */}
-          <Card className="rounded-[20px] border-none shadow-sm bg-white overflow-hidden">
+          <Card className="rounded-[20px] border-none shadow-sm bg-white">
             <CardContent className="p-4">
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-xl font-bold text-gray-900">السورة</h3>
@@ -182,22 +190,42 @@ const QuranPlayer = () => {
                 </button>
                 {surahOpen && (
                   <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-lg">
+                    <div className="p-2 border-b border-border">
+                      <div className="relative">
+                        <Search className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="ابحث عن سورة..."
+                          value={surahSearch}
+                          onChange={(e) => setSurahSearch(e.target.value)}
+                          className="pr-8 h-9 text-sm"
+                          autoFocus
+                        />
+                      </div>
+                    </div>
                     <div className="max-h-56 overflow-y-auto p-1">
-                      {availableSurahs.map((s, idx) => (
-                        <button
-                          key={s.id}
-                          type="button"
-                          onClick={() => {
-                            setSurahOpen(false);
-                            goToPlayer(idx);
-                          }}
-                          className={`w-full text-right px-3 py-2 text-sm rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors ${
-                            selectedSurah?.id === s.id ? "bg-accent text-accent-foreground font-semibold" : ""
-                          }`}
-                        >
-                          {s.name}
-                        </button>
-                      ))}
+                      {filteredSurahs.length === 0 ? (
+                        <p className="py-4 text-center text-sm text-muted-foreground">لا توجد نتائج</p>
+                      ) : (
+                        filteredSurahs.map((s) => {
+                          const originalIdx = availableSurahs.findIndex(as => as.id === s.id);
+                          return (
+                            <button
+                              key={s.id}
+                              type="button"
+                              onClick={() => {
+                                setSurahOpen(false);
+                                setSurahSearch("");
+                                goToPlayer(originalIdx);
+                              }}
+                              className={`w-full text-right px-3 py-2 text-sm rounded-sm hover:bg-accent hover:text-accent-foreground transition-colors ${
+                                selectedSurah?.id === s.id ? "bg-accent text-accent-foreground font-semibold" : ""
+                              }`}
+                            >
+                              {s.name}
+                            </button>
+                          );
+                        })
+                      )}
                     </div>
                   </div>
                 )}
