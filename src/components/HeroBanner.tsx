@@ -6,42 +6,37 @@ const HeroBanner = () => {
   const { isDark, toggle } = useTheme();
 
   return (
-    <header className="relative overflow-hidden">
-      {/* Background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+    <header className="relative w-full bg-[hsl(var(--emerald))] text-white rounded-b-[40px] overflow-hidden pb-12">
+      {/* Background with overlay */}
+      <div className="absolute inset-0 bg-black/20 z-0" />
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 z-0 mix-blend-overlay"
         style={{ backgroundImage: `url(${makkahBg})` }}
       />
-      {/* Dark overlay to hide any text in image and ensure readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.85)] via-[hsl(var(--primary)/0.7)] to-[hsl(var(--primary)/0.9)]" />
-      <div className="absolute inset-0 islamic-pattern opacity-40" />
-      <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-[hsl(var(--gold)/0.08)] blur-3xl" />
-      <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-[hsl(var(--gold)/0.06)] blur-3xl" />
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/40 via-transparent to-transparent z-0" />
 
-      {/* Dark mode toggle - fixed circular button */}
-      <button
-        onClick={toggle}
-        className="fixed top-5 left-5 z-50 w-12 h-12 rounded-full border-none cursor-pointer text-xl bg-muted hover:bg-muted/80 text-foreground flex items-center justify-center transition-all duration-300 shadow-lg"
-        aria-label="تبديل الوضع"
-      >
-        {isDark ? "☀️" : "🌙"}
-      </button>
+      {/* Top Navigation */}
+      <div className="relative z-20 flex items-center justify-between px-6 py-6 border-b border-white/10">
+        <button className="text-white/90 hover:text-white transition-colors" onClick={toggle} aria-label="Settings/Theme Toggle">
+          {/* Using gear instead of sun/moon, but linking dark mode for now */}
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+        <h1 className="text-xl font-bold tracking-wide">مشغل القرآن الكريم</h1>
+        <button className="text-white/90 hover:text-white transition-colors" aria-label="Menu">
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-16 md:py-24 text-center">
-        <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-[hsl(var(--gold)/0.15)] backdrop-blur-sm border border-[hsl(var(--gold)/0.2)] mb-6">
-          <BookOpen className="w-10 h-10 text-[hsl(var(--gold))]" />
-        </div>
-        <h1 className="text-3xl md:text-5xl font-extrabold text-primary-foreground mb-4 leading-tight">
-          القرآن الكريم
-        </h1>
-        <p className="text-lg md:text-xl text-[hsl(var(--gold-light))] max-w-xl mx-auto font-light">
-          رحلة طيبة في رحاب القرآن الكريم
+      {/* Hero Content */}
+      <div className="relative z-10 px-6 pt-12 pb-8 text-center flex flex-col items-center justify-center">
+        <p className="text-lg md:text-xl text-white/90 max-w-md mx-auto font-medium leading-relaxed drop-shadow-md">
+          استمتع بتجربة إيمانية فريدة مع أفضل القراء في العالم الإسلامي
         </p>
-        <div className="mt-8 flex items-center justify-center gap-3">
-          <span className="block w-12 h-px bg-[hsl(var(--gold)/0.4)]" />
-          <span className="block w-2 h-2 rounded-full bg-[hsl(var(--gold)/0.6)]" />
-          <span className="block w-12 h-px bg-[hsl(var(--gold)/0.4)]" />
-        </div>
       </div>
     </header>
   );
