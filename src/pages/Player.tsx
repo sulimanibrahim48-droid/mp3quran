@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Play, Pause, SkipBack, SkipForward, Rewind, FastForward, ArrowRight } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Rewind, FastForward, ArrowRight, Download, Heart } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import playerBg from "@/assets/player-bg.png";
 import type { AvailableSurah } from "@/hooks/useQuranAPI";
+import { addFavorite, isFavorite, removeFavorite } from "@/lib/favorites";
 
 interface PlayerState {
   surahs: AvailableSurah[];
@@ -43,6 +45,42 @@ const Player = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [speedIdx, setSpeedIdx] = useState(1);
+  const [fav, setFav] = useState(false);
+
+  useEffect(() => {
+    if (state) {
+      const cur = state.surahs[state.index];
+      setFav(isFavorite(cur.id, cur.url));
+    }
+  }, [state]);
+
+  const toggleFavorite = () => {
+    if (!state) return;
+    const cur = state.surahs[state.index];
+    if (fav) {
+      removeFavorite(cur.id, cur.url);
+      setFav(false);
+      toast.success("تم الحذف من المفضلة");
+    } else {
+      addFavorite({ surah: cur, reciterName: state.reciterName, addedAt: Date.now() });
+      setFav(true);
+      toast.success("تم الإضافة للمفضلة");
+    }
+  };
+
+  const downloadCurrent = () => {
+    if (!state) return;
+    const cur = state.surahs[state.index];
+    const a = document.createElement("a");
+    a.href = cur.url;
+    a.download = `${cur.name}.mp3`;
+    a.target = "_blank";
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    toast.success("بدأ تحميل السورة");
+  };
 
   useEffect(() => {
     if (!state) {
@@ -159,7 +197,14 @@ const Player = () => {
             <ArrowRight className="w-5 h-5" />
           </Button>
           <span className="text-xs text-muted-foreground">مشغّل القرآن الكريم</span>
-          <div className="w-10" />
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon" onClick={toggleFavorite} className="rounded-full" aria-label="المفضلة">
+              <Heart className={`w-5 h-5 ${fav ? "fill-red-500 text-red-500" : ""}`} />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={downloadCurrent} className="rounded-full" aria-label="تحميل">
+              <Download className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
 
         {/* Center - Surah & Reciter */}

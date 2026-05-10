@@ -255,45 +255,6 @@ const QuranPlayer = () => {
             <span className="font-bold">بدء الاستماع</span>
           </button>
 
-          <div className="grid grid-cols-2 gap-4">
-            <button 
-              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors disabled:opacity-50"
-              disabled={!selectedSurah}
-              onClick={() => {
-                if (!selectedSurah) return;
-                const a = document.createElement("a");
-                a.href = selectedSurah.url;
-                a.download = `${selectedSurah.name}.mp3`;
-                a.target = "_blank";
-                a.rel = "noopener";
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                import("sonner").then(({ toast }) => toast.success("بدأ تحميل السورة"));
-              }}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              <span className="text-sm font-medium">تحميل السورة</span>
-            </button>
-            <button 
-              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors disabled:opacity-50"
-              disabled={!selectedSurah}
-              onClick={() => {
-                if (!selectedSurah) return;
-                import("@/lib/favorites").then(({ addFavorite }) => {
-                  addFavorite({ surah: selectedSurah, reciterName: selectedReciterName, addedAt: Date.now() });
-                  import("sonner").then(({ toast }) => toast.success("تم إضافة السورة للمفضلة"));
-                });
-              }}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <span className="text-sm font-medium">أضف للمفضلة</span>
-            </button>
-          </div>
         </div>
       </div>
     </section>
