@@ -257,9 +257,19 @@ const QuranPlayer = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <button 
-              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors"
+              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors disabled:opacity-50"
+              disabled={!selectedSurah}
               onClick={() => {
-                import("sonner").then(({ toast }) => toast.info("سيتم تفعيل التحميل قريباً"));
+                if (!selectedSurah) return;
+                const a = document.createElement("a");
+                a.href = selectedSurah.url;
+                a.download = `${selectedSurah.name}.mp3`;
+                a.target = "_blank";
+                a.rel = "noopener";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                import("sonner").then(({ toast }) => toast.success("بدأ تحميل السورة"));
               }}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,9 +278,14 @@ const QuranPlayer = () => {
               <span className="text-sm font-medium">تحميل السورة</span>
             </button>
             <button 
-              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors"
+              className="bg-gray-100 rounded-2xl py-4 flex flex-col items-center justify-center gap-2 text-gray-700 hover:bg-gray-200 transition-colors disabled:opacity-50"
+              disabled={!selectedSurah}
               onClick={() => {
-                import("sonner").then(({ toast }) => toast.success("تم إضافة السورة للمفضلة"));
+                if (!selectedSurah) return;
+                import("@/lib/favorites").then(({ addFavorite }) => {
+                  addFavorite({ surah: selectedSurah, reciterName: selectedReciterName, addedAt: Date.now() });
+                  import("sonner").then(({ toast }) => toast.success("تم إضافة السورة للمفضلة"));
+                });
               }}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
