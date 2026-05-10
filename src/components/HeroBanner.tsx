@@ -1,9 +1,10 @@
-import { BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
 import makkahBg from "@/assets/makkah-bg.jpg";
 
 const HeroBanner = () => {
   const { isDark, toggle } = useTheme();
+  const navigate = useNavigate();
 
   return (
     <header className="relative w-full bg-[hsl(var(--emerald))] text-white rounded-b-[40px] overflow-hidden pb-12">
@@ -29,7 +30,7 @@ const HeroBanner = () => {
           )}
         </button>
         <h1 className="text-xl font-bold tracking-wide">مشغل القرآن الكريم</h1>
-        <button className="text-white/90 hover:text-white transition-colors" aria-label="Menu" onClick={() => import("sonner").then(({ toast }) => toast.info("القائمة الجانبية قيد التطوير"))}>
+        <button className="text-white/90 hover:text-white transition-colors" aria-label="الإعدادات" onClick={() => navigate("/settings")}>
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
           </svg>
