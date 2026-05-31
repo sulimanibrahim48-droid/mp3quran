@@ -59,13 +59,11 @@ const QuranPlayer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
           
           {/* Reciter Card */}
-          <Card className="rounded-[20px] border-none shadow-sm bg-white">
+          <Card className="rounded-2xl border border-gray-100 shadow-none bg-white">
             <CardContent className="p-4">
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-xl font-bold text-gray-900">القارئ</h3>
-                <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.2)] flex items-center justify-center text-black shrink-0">
-                  <Mic className="w-5 h-5" />
-                </div>
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-base font-semibold text-gray-900">القارئ</h3>
+                <Mic className="w-4 h-4 text-gray-400 shrink-0" />
               </div>
               <div className="relative">
                 <button
@@ -122,13 +120,11 @@ const QuranPlayer = () => {
           </Card>
 
           {/* Riwaya Label & Filter */}
-          <Card className="rounded-[20px] border-none shadow-sm bg-white">
+          <Card className="rounded-2xl border border-gray-100 shadow-none bg-white">
             <CardContent className="p-4">
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-xl font-bold text-gray-900">الرواية</h3>
-                <div className="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-800 shrink-0">
-                  <BookOpen className="w-5 h-5" />
-                </div>
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-base font-semibold text-gray-900">الرواية</h3>
+                <BookOpen className="w-4 h-4 text-gray-400 shrink-0" />
               </div>
               <div className="relative">
                 <button
@@ -168,13 +164,11 @@ const QuranPlayer = () => {
           </Card>
 
           {/* Surah List */}
-          <Card className="rounded-[20px] border-none shadow-sm bg-white">
+          <Card className="rounded-2xl border border-gray-100 shadow-none bg-white">
             <CardContent className="p-4">
-              <div className="flex justify-between items-start mb-3">
-                <h3 className="text-xl font-bold text-gray-900">السورة</h3>
-                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-800 shrink-0">
-                  <BookMarked className="w-5 h-5" />
-                </div>
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-base font-semibold text-gray-900">السورة</h3>
+                <BookMarked className="w-4 h-4 text-gray-400 shrink-0" />
               </div>
               <div className="relative">
                 <button
@@ -235,10 +229,10 @@ const QuranPlayer = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="max-w-md mx-auto space-y-4 pt-4">
+        <div className="max-w-md mx-auto pt-4">
           <button
             type="button"
-            className="w-full bg-[hsl(var(--emerald))] text-white rounded-[20px] py-4 flex flex-col items-center justify-center gap-2 shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="w-full bg-[hsl(var(--emerald))] text-white rounded-2xl py-4 flex items-center justify-center gap-3 transition-opacity hover:opacity-90 disabled:opacity-50"
             disabled={!selectedSurah}
             onClick={() => {
               if (selectedSurah) {
@@ -247,14 +241,11 @@ const QuranPlayer = () => {
               }
             }}
           >
-            <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center text-black">
-              <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-            <span className="font-bold">بدء الاستماع</span>
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span className="font-semibold">بدء الاستماع</span>
           </button>
-
         </div>
       </div>
     </section>
