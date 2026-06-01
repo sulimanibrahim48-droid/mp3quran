@@ -38,10 +38,29 @@ const HeroBanner = () => {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 px-6 pt-12 pb-8 text-center flex flex-col items-center justify-center">
+      <div className="relative z-10 px-6 pt-12 pb-8 text-center flex flex-col items-center justify-center gap-5">
         <p className="text-lg md:text-xl text-white/90 max-w-md mx-auto font-medium leading-relaxed drop-shadow-md">
           استمتع بتجربة إيمانية فريدة مع أفضل القراء في العالم الإسلامي
         </p>
+
+        {/* YouTube Channel Link */}
+        <a
+          href="https://www.youtube.com/channel/UCe9_SN79UetsCybvGKT5MnA"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-3 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white border border-white/20 rounded-2xl px-5 py-3 transition-all duration-200"
+        >
+          <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+          </svg>
+          <div className="text-right">
+            <span className="block text-sm font-semibold">قناة تلاوة القرآن الكريم</span>
+            <span className="block text-[11px] text-white/70">تابعنا على يوتيوب</span>
+          </div>
+          <svg className="w-4 h-4 text-white/60 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9" />
+          </svg>
+        </a>
       </div>
     </header>
   );
