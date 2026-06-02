@@ -63,19 +63,19 @@ const QuranPlayer = () => {
             <CardContent className="p-4">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-base font-semibold text-gray-900">القارئ</h3>
-                <Mic className="w-4 h-4 text-gray-400 shrink-0" />
+                <Mic className="w-5 h-5 text-[hsl(var(--emerald))] shrink-0" />
               </div>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => { setReciterOpen(!reciterOpen); setMoshafOpen(false); setSurahOpen(false); }}
-                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3.5 min-h-[48px] text-sm font-medium text-gray-800 disabled:opacity-50"
                   disabled={loading}
                 >
                   <span className="truncate ml-2 text-right">
                     {loading ? "جاري التحميل..." : selectedReciterName || "اختر القارئ"}
                   </span>
-                  <svg className="h-4 w-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg className="h-5 w-5 text-[hsl(var(--emerald))] opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
                 {reciterOpen && (
                   <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-lg">
@@ -124,19 +124,19 @@ const QuranPlayer = () => {
             <CardContent className="p-4">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-base font-semibold text-gray-900">الرواية</h3>
-                <BookOpen className="w-4 h-4 text-gray-400 shrink-0" />
+                <BookOpen className="w-5 h-5 text-[hsl(var(--emerald))] shrink-0" />
               </div>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => { if (selectedReciter && moshafList.length > 0) { setMoshafOpen(!moshafOpen); setReciterOpen(false); setSurahOpen(false); } }}
-                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3.5 min-h-[48px] text-sm font-medium text-gray-800 disabled:opacity-50"
                   disabled={!selectedReciter || moshafList.length === 0}
                 >
                   <span className="truncate ml-2 text-right">
                     {selectedMoshafName || "اختر الرواية"}
                   </span>
-                  <svg className="h-4 w-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg className="h-5 w-5 text-[hsl(var(--emerald))] opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
                 {moshafOpen && (
                   <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-lg">
@@ -168,19 +168,19 @@ const QuranPlayer = () => {
             <CardContent className="p-4">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="text-base font-semibold text-gray-900">السورة</h3>
-                <BookMarked className="w-4 h-4 text-gray-400 shrink-0" />
+                <BookMarked className="w-5 h-5 text-[hsl(var(--emerald))] shrink-0" />
               </div>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => { if (selectedMoshaf && availableSurahs.length > 0) { setSurahOpen(!surahOpen); setReciterOpen(false); setMoshafOpen(false); } }}
-                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3.5 min-h-[48px] text-sm font-medium text-gray-800 disabled:opacity-50"
                   disabled={!selectedMoshaf || availableSurahs.length === 0}
                 >
                   <span className="truncate ml-2 text-right">
                     {selectedSurah?.name || "اختر السورة"}
                   </span>
-                  <svg className="h-4 w-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg className="h-5 w-5 text-[hsl(var(--emerald))] opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
                 {surahOpen && (
                   <div className="absolute z-50 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-lg">
