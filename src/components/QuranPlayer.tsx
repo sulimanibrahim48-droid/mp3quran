@@ -56,7 +56,7 @@ const QuranPlayer = () => {
     <section className="relative px-4 pb-24 -mt-6 z-30">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Horizontal Container */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
           
           {/* Reciter Card */}
           <Card className="rounded-2xl border border-gray-100 shadow-none bg-white">
