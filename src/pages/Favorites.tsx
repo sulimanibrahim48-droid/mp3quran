@@ -39,7 +39,7 @@ const Favorites = () => {
 
       <main className="flex-1 px-4 py-6 max-w-2xl w-full mx-auto">
         {items.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
+          <div className="text-center py-20 text-muted-foreground">
             <Bookmark className="w-12 h-12 mx-auto mb-4 opacity-40" />
             <p className="text-lg font-medium">لا توجد سور في المفضلة</p>
             <p className="text-sm mt-2">أضف سورًا من شاشة الاستماع</p>
@@ -47,17 +47,17 @@ const Favorites = () => {
         ) : (
           <ul className="space-y-3">
             {items.map((item) => (
-              <li key={`${item.surah.id}-${item.surah.url}`} className="bg-white rounded-2xl shadow-sm p-4 flex items-center justify-between">
+              <li key={`${item.surah.id}-${item.surah.url}`} className="bg-card rounded-2xl shadow-sm p-4 flex items-center justify-between">
                 <button onClick={() => playItem(item)} className="flex-1 text-right">
-                  <p className="font-bold text-gray-900">{item.surah.name}</p>
-                  <p className="text-xs text-gray-500 mt-1">{item.reciterName}</p>
+                  <p className="font-bold text-foreground">{item.surah.name}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{item.reciterName}</p>
                 </button>
                 <div className="flex items-center gap-2">
                   <Button variant="ghost" size="icon" onClick={() => playItem(item)} aria-label="تشغيل">
                     <Play className="w-4 h-4" />
                   </Button>
                   <Button variant="ghost" size="icon" onClick={() => handleRemove(item)} aria-label="حذف">
-                    <Trash2 className="w-4 h-4 text-red-500" />
+                    <Trash2 className="w-4 h-4 text-destructive" />
                   </Button>
                 </div>
               </li>

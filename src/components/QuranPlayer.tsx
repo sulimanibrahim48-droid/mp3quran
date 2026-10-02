@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuranAPI } from "@/hooks/useQuranAPI";
 import { BookOpen, Mic, BookMarked, Search } from "lucide-react";
@@ -19,6 +19,7 @@ const QuranPlayer = () => {
     handleMoshafChange,
   } = useQuranAPI();
 
+  const rootRef = useRef<HTMLElement>(null);
   const [reciterSearch, setReciterSearch] = useState("");
   const [reciterOpen, setReciterOpen] = useState(false);
   const [moshafOpen, setMoshafOpen] = useState(false);
@@ -52,24 +53,38 @@ const QuranPlayer = () => {
     });
   };
 
+  useEffect(() => {
+    const close = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        setReciterOpen(false); setMoshafOpen(false); setSurahOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
+
+  useEffect(() => {
+    if (moshafList.length === 1 && !selectedMoshaf) handleMoshafChange(moshafList[0].id);
+  }, [moshafList, selectedMoshaf, handleMoshafChange]);
+
   return (
-    <section className="relative px-4 pb-24 -mt-6 z-30">
+    <section ref={rootRef} className="relative px-4 pb-24 -mt-6 z-30">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Horizontal Container */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
           
           {/* Reciter Card */}
-          <Card className="rounded-2xl border border-gray-100 shadow-none bg-white">
+          <Card className="rounded-2xl border border-border shadow-sm bg-card">
             <CardContent className="p-4">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-base font-semibold text-gray-900">القارئ</h3>
+                <h3 className="text-base font-semibold text-foreground">القارئ</h3>
                 <Mic className="w-5 h-5 text-[hsl(var(--emerald))] shrink-0" />
               </div>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => { setReciterOpen(!reciterOpen); setMoshafOpen(false); setSurahOpen(false); }}
-                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3.5 min-h-[48px] text-sm font-medium text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-muted px-4 py-3.5 min-h-[48px] text-sm font-medium text-foreground disabled:opacity-50"
                   disabled={loading}
                 >
                   <span className="truncate ml-2 text-right">
@@ -120,17 +135,17 @@ const QuranPlayer = () => {
           </Card>
 
           {/* Riwaya Label & Filter */}
-          <Card className="rounded-2xl border border-gray-100 shadow-none bg-white">
+          <Card className="rounded-2xl border border-border shadow-sm bg-card">
             <CardContent className="p-4">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-base font-semibold text-gray-900">الرواية</h3>
+                <h3 className="text-base font-semibold text-foreground">الرواية</h3>
                 <BookOpen className="w-5 h-5 text-[hsl(var(--emerald))] shrink-0" />
               </div>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => { if (selectedReciter && moshafList.length > 0) { setMoshafOpen(!moshafOpen); setReciterOpen(false); setSurahOpen(false); } }}
-                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3.5 min-h-[48px] text-sm font-medium text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-muted px-4 py-3.5 min-h-[48px] text-sm font-medium text-foreground disabled:opacity-50"
                   disabled={!selectedReciter || moshafList.length === 0}
                 >
                   <span className="truncate ml-2 text-right">
@@ -164,17 +179,17 @@ const QuranPlayer = () => {
           </Card>
 
           {/* Surah List */}
-          <Card className="rounded-2xl border border-gray-100 shadow-none bg-white">
+          <Card className="rounded-2xl border border-border shadow-sm bg-card">
             <CardContent className="p-4">
               <div className="flex justify-between items-center mb-3">
-                <h3 className="text-base font-semibold text-gray-900">السورة</h3>
+                <h3 className="text-base font-semibold text-foreground">السورة</h3>
                 <BookMarked className="w-5 h-5 text-[hsl(var(--emerald))] shrink-0" />
               </div>
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => { if (selectedMoshaf && availableSurahs.length > 0) { setSurahOpen(!surahOpen); setReciterOpen(false); setMoshafOpen(false); } }}
-                  className="flex w-full items-center justify-between rounded-xl bg-gray-50 px-4 py-3.5 min-h-[48px] text-sm font-medium text-gray-800 disabled:opacity-50"
+                  className="flex w-full items-center justify-between rounded-xl bg-muted px-4 py-3.5 min-h-[48px] text-sm font-medium text-foreground disabled:opacity-50"
                   disabled={!selectedMoshaf || availableSurahs.length === 0}
                 >
                   <span className="truncate ml-2 text-right">
