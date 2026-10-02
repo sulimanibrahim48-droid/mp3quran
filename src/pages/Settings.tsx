@@ -27,12 +27,12 @@ const Settings = () => {
       </header>
 
       <main className="flex-1 px-4 py-6 max-w-2xl w-full mx-auto space-y-3">
-        <div className="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm">
+        <div className="bg-card rounded-2xl p-4 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-3">
             {isDark ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             <div className="text-right">
-              <p className="font-bold text-gray-900">الوضع الداكن</p>
-              <p className="text-xs text-gray-500">تبديل المظهر بين الفاتح والداكن</p>
+              <p className="font-bold text-foreground">الوضع الداكن</p>
+              <p className="text-xs text-muted-foreground">تبديل المظهر بين الفاتح والداكن</p>
             </div>
           </div>
           <Switch checked={isDark} onCheckedChange={toggle} />
@@ -40,25 +40,25 @@ const Settings = () => {
 
         <button
           onClick={handleClear}
-          className="w-full bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm hover:bg-gray-50 transition-colors"
+          className="w-full bg-card rounded-2xl p-4 flex items-center justify-between shadow-sm hover:bg-muted transition-colors"
         >
           <div className="flex items-center gap-3">
-            <Trash2 className="w-5 h-5 text-red-500" />
+            <Trash2 className="w-5 h-5 text-destructive" />
             <div className="text-right">
-              <p className="font-bold text-gray-900">مسح المفضلة</p>
-              <p className="text-xs text-gray-500">حذف جميع السور المحفوظة</p>
+              <p className="font-bold text-foreground">مسح المفضلة</p>
+              <p className="text-xs text-muted-foreground">حذف جميع السور المحفوظة</p>
             </div>
           </div>
         </button>
 
-        <div className="bg-white rounded-2xl p-4 flex items-start gap-3 shadow-sm">
-          <Info className="w-5 h-5 mt-0.5 text-gray-600" />
+        <div className="bg-card rounded-2xl p-4 flex items-start gap-3 shadow-sm">
+          <Info className="w-5 h-5 mt-0.5 text-muted-foreground" />
           <div className="text-right">
-            <p className="font-bold text-gray-900">عن التطبيق</p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="font-bold text-foreground">عن التطبيق</p>
+            <p className="text-xs text-muted-foreground mt-1">
               مشغل القرآن الكريم - استمع لتلاوات أشهر القراء من جميع أنحاء العالم الإسلامي.
             </p>
-            <p className="text-xs text-gray-400 mt-2">الإصدار 1.0.0</p>
+            <p className="text-xs text-muted-foreground mt-2">الإصدار 1.0.0</p>
           </div>
         </div>
       </main>
