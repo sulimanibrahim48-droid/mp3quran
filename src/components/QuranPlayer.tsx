@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuranAPI } from "@/hooks/useQuranAPI";
 import { BookOpen, Mic, BookMarked, Search } from "lucide-react";
@@ -19,6 +19,7 @@ const QuranPlayer = () => {
     handleMoshafChange,
   } = useQuranAPI();
 
+  const rootRef = useRef<HTMLElement>(null);
   const [reciterSearch, setReciterSearch] = useState("");
   const [reciterOpen, setReciterOpen] = useState(false);
   const [moshafOpen, setMoshafOpen] = useState(false);
@@ -52,8 +53,22 @@ const QuranPlayer = () => {
     });
   };
 
+  useEffect(() => {
+    const close = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
+        setReciterOpen(false); setMoshafOpen(false); setSurahOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
+
+  useEffect(() => {
+    if (moshafList.length === 1 && !selectedMoshaf) handleMoshafChange(moshafList[0].id);
+  }, [moshafList, selectedMoshaf, handleMoshafChange]);
+
   return (
-    <section className="relative px-4 pb-24 -mt-6 z-30">
+    <section ref={rootRef} className="relative px-4 pb-24 -mt-6 z-30">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Horizontal Container */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
