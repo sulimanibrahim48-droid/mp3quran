@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Play, Pause, SkipBack, SkipForward, Rewind, FastForward, ArrowRight, Download, Heart } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Rewind, FastForward, ArrowRight, Download, Heart, CheckCircle2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import playerBg from "@/assets/player-bg.png";
 import type { AvailableSurah } from "@/hooks/useQuranAPI";
 import { addFavorite, isFavorite, removeFavorite } from "@/lib/favorites";
+import { getOffline, saveOffline, removeOffline } from "@/lib/offline";
 
 interface PlayerState {
   surahs: AvailableSurah[];
@@ -68,18 +69,28 @@ const Player = () => {
     }
   };
 
-  const downloadCurrent = () => {
+  const [saved, setSaved] = useState(false);
+  const [progress, setProgress] = useState<number | null>(null);
+
+  const downloadCurrent = async () => {
     if (!state) return;
     const cur = state.surahs[state.index];
-    const a = document.createElement("a");
-    a.href = cur.url;
-    a.download = `${cur.name}.mp3`;
-    a.target = "_blank";
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    toast.success("بدأ تحميل السورة");
+    if (saved) {
+      await removeOffline(cur.url);
+      setSaved(false);
+      toast.success("تم حذف التلاوة من الجهاز");
+      return;
+    }
+    setProgress(0);
+    try {
+      await saveOffline(cur.url, setProgress);
+      setSaved(true);
+      toast.success("تم حفظ التلاوة — يمكنك سماعها بدون إنترنت");
+    } catch {
+      toast.error("تعذّر حفظ التلاوة، تأكد من الاتصال");
+    } finally {
+      setProgress(null);
+    }
   };
 
   useEffect(() => {
@@ -92,13 +103,26 @@ const Player = () => {
 
   const currentSurah = state?.surahs[state.index];
 
-  // Load source on surah change
+  // Load source on surah change (offline copy first)
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentSurah) return;
-    audio.src = currentSurah.url;
-    audio.playbackRate = SPEEDS[speedIdx];
-    audio.play().catch(() => {});
+    let objUrl: string | null = null;
+    let cancelled = false;
+    getOffline(currentSurah.url)
+      .catch(() => undefined)
+      .then((blob) => {
+        if (cancelled) return;
+        setSaved(!!blob);
+        if (blob) objUrl = URL.createObjectURL(blob);
+        audio.src = objUrl || currentSurah.url;
+        audio.playbackRate = SPEEDS[speedIdx];
+        audio.play().catch(() => {});
+      });
+    return () => {
+      cancelled = true;
+      if (objUrl) URL.revokeObjectURL(objUrl);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSurah?.url]);
 
@@ -201,8 +225,8 @@ const Player = () => {
             <Button variant="ghost" size="icon" onClick={toggleFavorite} className="rounded-full" aria-label="المفضلة">
               <Heart className={`w-5 h-5 ${fav ? "fill-red-500 text-red-500" : ""}`} />
             </Button>
-            <Button variant="ghost" size="icon" onClick={downloadCurrent} className="rounded-full" aria-label="تحميل">
-              <Download className="w-5 h-5" />
+            <Button variant="ghost" size={progress !== null ? "sm" : "icon"} onClick={downloadCurrent} disabled={progress !== null} className="rounded-full" aria-label={saved ? "حذف من الجهاز" : "حفظ للاستماع بدون إنترنت"}>
+              {progress !== null ? <span className="text-xs">{progress}%</span> : saved ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <Download className="w-5 h-5" />}
             </Button>
           </div>
         </div>
