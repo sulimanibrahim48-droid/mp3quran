@@ -1,4 +1,4 @@
-import { Home, Bookmark, User } from "lucide-react";
+import { Home, Bookmark, User, Clapperboard } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
 const Footer = () => {
@@ -6,6 +6,7 @@ const Footer = () => {
 
   const navItems = [
     { to: "/", icon: Home, label: "الرئيسية" },
+    { to: "/shorts", icon: Clapperboard, label: "شورت" },
     { to: "/favorites", icon: Bookmark, label: "المفضلة" },
     { to: "/settings", icon: User, label: "الإعدادات" },
   ];
