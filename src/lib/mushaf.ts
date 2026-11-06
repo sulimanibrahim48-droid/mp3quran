@@ -8,7 +8,7 @@ export const JUZ_START_PAGES = [
 
 export const clampPage = (p: number) => Math.min(TOTAL_PAGES, Math.max(1, Math.round(p) || 1));
 
-export const mushafPageUrl = (p: number) => `https://www.mp3quran.net/mushaf2/${p}.jpg`;
+export const mushafPageUrl = (p: number) => `https://www.mp3quran.net/mushaf2/${p + 1}.jpg`; // image 1 is the cover, so page N is image N+1
 
 /** Surah shown at the top of a page: the last surah that starts on or before it. */
 export function surahForPage<T extends { start_page: number }>(suwar: T[], page: number): T | undefined {

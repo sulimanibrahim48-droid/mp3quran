@@ -1,10 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { clampPage, surahForPage, JUZ_START_PAGES } from "@/lib/mushaf";
+import { clampPage, surahForPage, JUZ_START_PAGES, mushafPageUrl } from "@/lib/mushaf";
 
 describe("mushaf", () => {
   it("clamps pages to 1..604", () => {
     expect(clampPage(0)).toBe(1);
     expect(clampPage(700)).toBe(604);
+  });
+  it("page 1 maps to image 2 (cover is image 1)", () => {
+    expect(mushafPageUrl(1)).toBe("https://www.mp3quran.net/mushaf2/2.jpg");
   });
   it("has 30 juz", () => expect(JUZ_START_PAGES).toHaveLength(30));
   it("finds surah for page", () => {
