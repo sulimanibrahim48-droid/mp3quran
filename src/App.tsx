@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import Player from "./pages/Player.tsx";
+import Mushaf from "./pages/Mushaf.tsx";
 import Favorites from "./pages/Favorites.tsx";
 import Settings from "./pages/Settings.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -20,6 +21,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/player" element={<Player />} />
+          <Route path="/mushaf" element={<Mushaf />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
