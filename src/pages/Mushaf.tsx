@@ -157,7 +157,7 @@ const Mushaf = () => {
         {/* Page */}
         <div
           ref={viewRef}
-          className="relative bg-card border border-border rounded-2xl overflow-hidden flex items-center justify-center min-h-[60vh]"
+          className="relative mx-auto w-full max-w-[min(100%,calc(80vh*0.6956))] aspect-[1252/1800] bg-background rounded-2xl overflow-hidden shadow-lg border border-border"
           onTouchStart={(e) => (touchX.current = e.changedTouches[0].screenX)}
           onTouchEnd={(e) => {
             const dx = e.changedTouches[0].screenX - touchX.current;
@@ -170,7 +170,7 @@ const Mushaf = () => {
             src={mushafPageUrl(page)}
             alt={`صفحة ${page} من المصحف الشريف`}
             onLoad={() => setLoaded(true)}
-            className={`w-full h-auto max-h-[85vh] object-contain transition-opacity ${loaded ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 w-full h-full object-contain scale-[1.06] transition-opacity ${loaded ? "opacity-100" : "opacity-0"}`}
           />
           {/* preload neighbours */}
           {page < TOTAL_PAGES && <link rel="prefetch" href={mushafPageUrl(page + 1)} />}
