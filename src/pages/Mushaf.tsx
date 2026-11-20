@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Headphones, Bookmark, Play, Pause, Maximize } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Headphones, Bookmark, Play, Pause, Maximize, Moon, Sun, ZoomIn, ZoomOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
+import { useTheme } from "@/hooks/useTheme";
 import { JUZ_START_PAGES, TOTAL_PAGES, clampPage, mushafPageUrl, surahForPage } from "@/lib/mushaf";
 
 const API = "https://mp3quran.net/api/v3";
@@ -16,6 +17,7 @@ const selectCls = "h-11 w-full rounded-xl border border-border bg-card text-fore
 
 const Mushaf = () => {
   const navigate = useNavigate();
+  const { isDark, toggle: toggleTheme } = useTheme();
   const [params] = useSearchParams();
   const initial = Number(params.get("page")) || Number(localStorage.getItem(BOOKMARK_KEY)) || 1;
   const [page, setPage] = useState(clampPage(initial));
@@ -26,9 +28,15 @@ const Mushaf = () => {
   const [playing, setPlaying] = useState(false);
   const [bookmark, setBookmark] = useState<number>(Number(localStorage.getItem(BOOKMARK_KEY)) || 0);
   const [loaded, setLoaded] = useState(false);
+  const [zoom, setZoom] = useState(1);
   const audioRef = useRef<HTMLAudioElement>(null);
   const touchX = useRef(0);
+  const pinchDist = useRef(0);
   const viewRef = useRef<HTMLDivElement>(null);
+
+  const ZOOM_MIN = 1, ZOOM_MAX = 3, ZOOM_STEP = 0.25;
+  const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2)));
+  const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2)));
 
   useEffect(() => {
     fetch(`${API}/suwar?language=ar`).then((r) => r.json()).then((d) => setSuwar(d.suwar || [])).catch(() => {});
@@ -95,6 +103,31 @@ const Mushaf = () => {
     return () => window.removeEventListener("keydown", onKey);
   });
 
+  // pinch-to-zoom (needs a non-passive listener to block the browser's own zoom)
+  useEffect(() => {
+    const el = viewRef.current;
+    if (!el) return;
+    const dist = (t: TouchList) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+    const onStart = (e: TouchEvent) => { if (e.touches.length === 2) pinchDist.current = dist(e.touches); };
+    const onMove = (e: TouchEvent) => {
+      if (e.touches.length !== 2 || !pinchDist.current) return;
+      e.preventDefault();
+      const d = dist(e.touches);
+      const ratio = d / pinchDist.current;
+      pinchDist.current = d;
+      setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(z * ratio).toFixed(2))));
+    };
+    const onEnd = () => { pinchDist.current = 0; };
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchmove", onMove, { passive: false });
+    el.addEventListener("touchend", onEnd);
+    return () => {
+      el.removeEventListener("touchstart", onStart);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onEnd);
+    };
+  }, []);
+
   const togglePlay = () => {
     const a = audioRef.current;
     if (!a || !audioUrl) return;
@@ -114,9 +147,14 @@ const Mushaf = () => {
           <ArrowRight className="w-5 h-5" />
         </Button>
         <h1 className="text-xl font-bold">المصحف الشريف</h1>
-        <Button variant="ghost" size="icon" onClick={() => viewRef.current?.requestFullscreen?.()} className="text-white hover:bg-white/10 rounded-full" aria-label="ملء الشاشة">
-          <Maximize className="w-5 h-5" />
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" onClick={toggleTheme} className="text-white hover:bg-white/10 rounded-full" aria-label={isDark ? "الوضع الفاتح" : "الوضع الداكن"}>
+            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => viewRef.current?.requestFullscreen?.()} className="text-white hover:bg-white/10 rounded-full" aria-label="ملء الشاشة">
+            <Maximize className="w-5 h-5" />
+          </Button>
+        </div>
       </header>
 
       <main className="flex-1 px-4 py-5 max-w-3xl w-full mx-auto space-y-4">
@@ -154,24 +192,44 @@ const Mushaf = () => {
           </div>
         )}
 
+        {/* Zoom controls */}
+        <div className="flex items-center justify-center gap-2">
+          <Button variant="outline" size="icon" onClick={zoomOut} disabled={zoom <= ZOOM_MIN} className="rounded-full" aria-label="تصغير">
+            <ZoomOut className="w-5 h-5" />
+          </Button>
+          <button onClick={() => setZoom(1)} className="min-w-[64px] h-9 px-2 rounded-xl border border-border bg-card text-sm font-bold text-foreground" aria-label="إعادة الحجم الطبيعي">
+            {Math.round(zoom * 100)}٪
+          </button>
+          <Button variant="outline" size="icon" onClick={zoomIn} disabled={zoom >= ZOOM_MAX} className="rounded-full" aria-label="تكبير">
+            <ZoomIn className="w-5 h-5" />
+          </Button>
+        </div>
+
         {/* Page */}
         <div
           ref={viewRef}
-          className="relative mx-auto w-full max-w-[min(100%,calc(80vh*0.6956))] aspect-[1252/1800] bg-background rounded-2xl overflow-hidden shadow-lg border border-border"
-          onTouchStart={(e) => (touchX.current = e.changedTouches[0].screenX)}
+          className="relative mx-auto w-full max-w-[min(100%,calc(80vh*0.6956))] aspect-[1252/1800] bg-card rounded-2xl overflow-auto shadow-lg border border-border touch-pan-x touch-pan-y"
+          onTouchStart={(e) => { if (e.touches.length === 1) touchX.current = e.changedTouches[0].screenX; }}
           onTouchEnd={(e) => {
+            if (zoom > 1) return; // while zoomed, swipes scroll the page instead of turning it
             const dx = e.changedTouches[0].screenX - touchX.current;
             if (Math.abs(dx) > 50) (dx > 0 ? next() : prev());
           }}
         >
           {!loaded && <div className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">جاري تحميل الصفحة...</div>}
-          <img
-            key={page}
-            src={mushafPageUrl(page)}
-            alt={`صفحة ${page} من المصحف الشريف`}
-            onLoad={() => setLoaded(true)}
-            className={`absolute inset-0 w-full h-full object-contain scale-[1.06] transition-opacity ${loaded ? "opacity-100" : "opacity-0"}`}
-          />
+          <div
+            className="relative"
+            style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%`, minWidth: "100%", minHeight: "100%" }}
+          >
+            <img
+              key={page}
+              src={mushafPageUrl(page)}
+              alt={`صفحة ${page} من المصحف الشريف`}
+              onLoad={() => setLoaded(true)}
+              draggable={false}
+              className={`absolute inset-0 w-full h-full object-contain scale-[1.06] transition-opacity ${loaded ? "opacity-100" : "opacity-0"}`}
+            />
+          </div>
           {/* preload neighbours */}
           {page < TOTAL_PAGES && <link rel="prefetch" href={mushafPageUrl(page + 1)} />}
         </div>
