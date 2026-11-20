@@ -34,7 +34,7 @@ const Mushaf = () => {
   const pinchDist = useRef(0);
   const viewRef = useRef<HTMLDivElement>(null);
 
-  const ZOOM_MIN = 1, ZOOM_MAX = 3, ZOOM_STEP = 0.25;
+  const ZOOM_MIN = 1, ZOOM_MAX = 3, ZOOM_STEP = 0.05;
   const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2)));
   const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2)));
 
